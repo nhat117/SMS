@@ -1,12 +1,15 @@
 package rmit.rmitsb.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rmit.rmitsb.model.Student;
 import rmit.rmitsb.repository.StudentRepository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
@@ -20,8 +23,18 @@ public class StudentServiceImpl implements StudentService {
         this.studentRepository.save(student);
     }
 
-    public List<Student> getAllStudents(){
-        return this.studentRepository.findAll();
+    public List<Student> getAllStudents(int pageNo, int pageSize){
+        Pageable firstPageWithTwoElement = PageRequest.of(pageNo,pageSize);
+
+        Page<Student> pagedResult = studentRepository.findAll(firstPageWithTwoElement);
+
+        //If the page have content
+
+        if(pagedResult.hasContent()){
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<Student>();
+        }
     }
 
     public Student getStudent(Long id){
@@ -35,13 +48,10 @@ public class StudentServiceImpl implements StudentService {
         return student;
     }
 
-    public Student deleteStudent(Long id){
+    public void deleteStudent(Long id){
 
         Student student = getStudent(id);
         this.studentRepository.delete(student);
-        return student;
     }
-
-
 
 }

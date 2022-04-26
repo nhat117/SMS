@@ -1,35 +1,28 @@
 package rmit.rmitsb.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
+@Table(name="student")
+@NoArgsConstructor
+@Data
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="student_id")
     private long id;
 
+    @Column(name = "name")
     private String name;
 
-    public Student() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @ManyToOne
+    @JoinColumn(name = "school_id", nullable = true)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
+    private School school;
 }

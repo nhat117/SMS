@@ -1,4 +1,4 @@
-package rmit.rmitsb.contrller;
+package rmit.rmitsb.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,14 +8,16 @@ import rmit.rmitsb.service.StudentService;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 public class StudentController {
 
     @Autowired
     private StudentService studentService;
 
+    //Access by by localhost:8080/students?pageNo=0&pageSize=100
     @RequestMapping(path = "/students", method = RequestMethod.GET)
-    public List<Student> getAllStudents(){
-        return studentService.getAllStudents();
+    public List<Student> getAllStudents(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "2") int pageSize){
+        return studentService.getAllStudents(pageNo,pageSize);
     }
 
     @RequestMapping(path = "/students", method = RequestMethod.POST)
