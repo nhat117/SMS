@@ -8,7 +8,7 @@ import rmit.rmitsb.service.StudentService;
 import java.util.List;
 
 @RestController
-@CrossOrigin("https://isnt-nhat117-awesome.netlify.app/")
+@CrossOrigin("*")
 public class StudentController {
 
     @Autowired
@@ -18,6 +18,11 @@ public class StudentController {
     @RequestMapping(path = "/students", method = RequestMethod.GET)
     public List<Student> getAllStudents(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "2") int pageSize){
         return studentService.getAllStudents(pageNo,pageSize);
+    }
+
+    @RequestMapping(path = "/findstudents", method = RequestMethod.GET)
+    public List<Student> findStudent(@RequestParam() String field, @RequestParam(defaultValue = "true") boolean isasc){
+        return studentService.findStudentBy(field, isasc);
     }
 
     @RequestMapping(path = "/students", method = RequestMethod.POST)

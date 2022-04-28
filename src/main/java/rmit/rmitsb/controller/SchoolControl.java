@@ -8,7 +8,7 @@ import rmit.rmitsb.service.SchoolService;
 import java.util.List;
 
 @RestController
-@CrossOrigin("https://isnt-nhat117-awesome.netlify.app/")
+@CrossOrigin("*")
 public class SchoolControl {
 
     @Autowired

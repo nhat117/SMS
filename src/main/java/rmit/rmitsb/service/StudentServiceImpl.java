@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import rmit.rmitsb.model.Student;
 import rmit.rmitsb.repository.StudentRepository;
 
@@ -19,25 +21,25 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    public void saveStudent(Student student){
+    public void saveStudent(Student student) {
         this.studentRepository.save(student);
     }
 
-    public List<Student> getAllStudents(int pageNo, int pageSize){
-        Pageable firstPageWithTwoElement = PageRequest.of(pageNo,pageSize);
+    public List<Student> getAllStudents(int pageNo, int pageSize) {
+        Pageable firstPageWithTwoElement = PageRequest.of(pageNo, pageSize);
 
         Page<Student> pagedResult = studentRepository.findAll(firstPageWithTwoElement);
 
         //If the page have content
 
-        if(pagedResult.hasContent()){
+        if (pagedResult.hasContent()) {
             return pagedResult.getContent();
         } else {
             return new ArrayList<Student>();
         }
     }
 
-    public Student getStudent(Long id){
+    public Student getStudent(Long id) {
         Student student = null;
         try {
             student = this.studentRepository.findById(id)
@@ -48,10 +50,20 @@ public class StudentServiceImpl implements StudentService {
         return student;
     }
 
-    public void deleteStudent(Long id){
+    public void deleteStudent(Long id) {
 
         Student student = getStudent(id);
         this.studentRepository.delete(student);
     }
 
+    //Search for product
+    public List<Student> findStudentBy(String field, boolean isAscending) {
+        List<Student> res;
+        if (isAscending) {
+            res = (List<Student>) this.studentRepository.findAll(Sort.by(Sort.Direction.ASC,field));
+        } else {
+            res = (List<Student>) this.studentRepository.findAll(Sort.by(Sort.Direction.DESC,field));
+        }
+        return res;
+    }
 }
